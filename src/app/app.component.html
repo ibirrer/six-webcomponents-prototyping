@@ -1,0 +1,74 @@
+<six-header custom>
+  <six-header-item><six-logo /></six-header-item>
+  <six-header-item class="ml-auto"><six-avatar /></six-header-item>
+</six-header>
+
+<main class="mx-auto max-w-screen-lg p-3xl">
+  <!-- process graph -->
+  <div class="mb-2xl bg-rock-100 shadow-md">
+    <div class="flex flex-wrap justify-between gap-lg px-xl py-lg">
+      @for (step of steps(); track step) {
+        <six-tooltip [content]="step.description">
+          <button
+            (click)="editStep(step)"
+            class="text-medium flex h-4xl w-4xl items-center rounded-full border-2 border-rock-800 bg-rock-800 text-rock-800 hover:bg-rock-300"
+            [class.border-dashed]="!step.mandatory"
+            [class.bg-rock-800]="$last || $first"
+            [class.text-white]="$last || $first"
+          >
+            <div class="flex-1 text-center">{{ step.title }}</div>
+          </button>
+        </six-tooltip>
+        @if (!$last) {
+          <div class="grid place-items-center text-rock-800">
+            <six-icon>arrow_right_alt</six-icon>
+          </div>
+        }
+      }
+    </div>
+    <div class="flex justify-end border-t border-rock-300 bg-rock-200 p-sm pr-xl">
+      <six-button (click)="addStep()" type="secondary">Add Step</six-button>
+    </div>
+  </div>
+
+  <!-- detail table -->
+  <six-details summary="Details">
+    <table class="six-table">
+      <tr>
+        <th class="text-left">ID</th>
+        <th class="text-left">Step</th>
+        <th class="text-left">Description</th>
+        <th class="text-right">Mandatory</th>
+      </tr>
+      @for (step of steps(); track step) {
+        <tr>
+          <td>{{ step.id }}</td>
+          <td>{{ step.title }}</td>
+          <td>{{ step.description }}</td>
+          <td class="text-right">
+            @if (step.mandatory) {
+              <six-icon>check</six-icon>
+            } @else {
+              <six-icon>close</six-icon>
+            }
+          </td>
+        </tr>
+      }
+    </table>
+  </six-details>
+</main>
+
+<!-- drawer -->
+<six-drawer
+  #drawer
+  [label]="currentStep() ? 'Edit Step' : 'New Step'"
+  (six-drawer-initial-focus)="$event.preventDefault(); title.setFocus()"
+>
+  <form class="grid grid-cols-6 gap-md" (ngSubmit)="saveStep(title.value, mandatory.checked, description.value)">
+    <six-input class="col-span-4" #title [value]="currentStep()?.title" label="Title" />
+    <six-switch class="col-span-2" [checked]="currentStep()?.mandatory" #mandatory label="Mandatory"></six-switch>
+    <six-textarea class="col-span-6" [value]="currentStep()?.description" #description label="Description" />
+    <six-button class="col-span-2" type="danger" (click)="deleteStep()">Delete</six-button>
+    <six-button class="col-span-4" submit>Save</six-button>
+  </form>
+</six-drawer>

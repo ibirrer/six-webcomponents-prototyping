@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "@six-group/ui-library/dist/ui-library/ui-library.css";
+
+html,
+body {
+  height: 100%;
+}
+
+table.six-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--six-font-size-small);
+
+  thead {
+    border-bottom: 2px solid var(--six-color-web-rock-700);
+  }
+
+  th {
+    color: var(--six-color-web-rock-900);
+    padding: var(--six-spacing-small) var(--six-spacing-small) var(--six-spacing-x-small);
+  }
+
+  td {
+    padding: var(--six-spacing-small);
+    border-top: 1px solid var(--six-color-web-rock-400);
+  }
+}
